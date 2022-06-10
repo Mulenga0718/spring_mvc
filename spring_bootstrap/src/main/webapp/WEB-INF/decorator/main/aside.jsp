@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+    
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
@@ -17,11 +19,11 @@
         </div>
         <div class="info">
              <div class="row">
-                <a href="javascript:OpenWindow('<%=request.getContextPath()%>/member/detail.do?id=${loginUser.id }','내정보','700','800');"class="d-block" >${loginUser.name }</a>&nbsp;&nbsp;
-                <button onclick="location.href='<%=request.getContextPath() %>/common/logout.do';" class="btn btn-xs btn-primary col-xs-3 " type="button" >LOGOUT</button>
-            </div>
-            <a href="tel:${loginUser.phone }">tel : ${loginUser.phone } </a><br/>
-              <a href="mailto:${loginUser.email }">email : ${loginUser.email }</a>
+		          <a href="javascript:OpenWindow('<%=request.getContextPath()%>/member/detail.do?id=${loginUser.id }','내정보','700','800')"class="d-block" >${loginUser.name }</a>&nbsp;&nbsp;
+		          <button onclick="location.href='<%=request.getContextPath() %>/common/logout.do';" class="btn btn-xs btn-primary col-xs-3 " type="button" >LOGOUT</button>
+	         </div>
+	         <a href="tel:${loginUser.phone }">tel : ${loginUser.phone }</a><br/>
+           	<a href="mailto:${loginUser.email }">email : ${loginUser.email }</a>
         </div>
       </div>
 
@@ -34,6 +36,6 @@
       </nav>
       <!-- /.sidebar-menu -->
     </div>
-    
     <!-- /.sidebar -->
   </aside>
+    

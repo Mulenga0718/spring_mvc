@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+    
+    
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -20,4 +22,3 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition sidebar-mini">
-

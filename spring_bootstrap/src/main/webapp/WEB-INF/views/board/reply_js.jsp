@@ -16,7 +16,8 @@
 				onclick="replyModifyModal_go('{{rno}}');"				
 				style="display:{{VisibleByLoginCheck replyer}};"
 	    		data-replyer={{replyer}} data-toggle="modal" data-target="#modifyModal">Modify</a>
-  		</span>	
+  		</span>
+	
   		<h3 class="timeline-header"><strong style="display:none;">{{rno}}</strong>{{replyer}}</h3>
   		<div class="timeline-body" id="{{rno}}-replytext">{{replytext}} </div>
 	</div>
@@ -38,7 +39,7 @@
 </li>
 {{#each pageNum}}
 <li class="paginate_button page-item {{signActive this}} ">
-	<a href="javascript:getPage('<%=request.getContextPath()%>/reply/list.do?bno=${board.bno}&page={{this}}',{{this}})" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
+	<a href="javascript:getPage('<%=request.getContextPath()%>/reply/list.do?bno=${board.bno}&page={{this}}',{{this}});" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
 		{{this}}
 	</a>
 </li>
@@ -55,144 +56,163 @@
 	</a>
 </li>	
 </script>
-<script>
-	var replyPage = 1;
-	
-	window.onload=function(){
-		getPage("<%=request.getContextPath()%>/reply/list.do?bno=${board.bno}&page="+replyPage);
-	}
-	function getPage(pageInfo, page){
-		if(page) replyPage = page;
-		$.getJSON(pageInfo, function(data){
-			printData(data.replyList, $('#repliesDiv'), $('#reply-list-template'));
-			printPagination(data.pageMaker, $('ul#pagination'), $('#reply-pagination-template'));
-		});
-	}
 
-	function printData(replyArr, target, templateObject){
-		var template = Handlebars.compile(templateObject.html());
-		var html = template(replyArr);
-		$('.replyLi').remove();
-		target.after(html);
+
+<script>
+var replyPage = 1;
+window.onload = function(){
+	getPage("<%=request.getContextPath()%>/reply/list.do?bno=${board.bno}&page="+replyPage);
+}
+function getPage(pageInfo, page) {
+	if(page) replyPage = page;
+	$.getJSON(pageInfo, function(data){
+		printData(data.replyList, $('#repliesDiv'), $('#reply-list-template'));
+		printPagination(data.pageMaker, $('ul#pagination'), $('#reply-pagination-template'));
+	});
+}
+function printData(replyArr, target, templateObject) {
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(replyArr);
+	$('.replyLi').remove();
+	target.after(html);
+}
+Handlebars.registerHelper({
+	"prettifyDate":function(timeValue){
+		var dateObj = new Date(timeValue);
+		var year = dateObj.getFullYear();
+		var month = dateObj.getMonth()+1;
+		var date = dateObj.getDate();
+		return year + "/" + month + "/" + date;
+	},
+	"VisibleByLoginCheck":function(replyer){
+		var result = "none";
+		if(replyer == "${loginUser.id}") result = "visible";
+		return result;
+	},
+	"signActive":function(pageNum){
+		if(pageNum == replyPage) return 'active';
 	}
-	Handlebars.registerHelper({
-		"prettifyDate" : function(timeValue){
-			var dateObj= new Date(timeValue);
-			var year= dateObj.getFullYear();
-			var month = dateObj.getMonth()+1;
-			var date= dateObj.getDate();
-			return year+"/"+month+"/"+date;
+});
+
+// pagination
+function printPagination(pageMaker, target, templateObject){
+	var pageNumArray = new Array(pageMaker.endPage - pageMaker.startPage + 1);
+	for(var i = 0; i<pageMaker.endPage - pageMaker.startPage + 1; i++){
+		pageNumArray[i] = pageMaker.startPage + i;
+	}
+	
+	pageMaker.pageNum = pageNumArray;
+	pageMaker.prevPageNum = pageMaker.startPage - 1;
+	pageMaker.nextPageNum = pageMaker.endPage + 1;
+	
+	var template = Handlebars.compile(templateObject.html());
+	var html = template(pageMaker);
+	target.html("").html(html);
+}
+
+// regist
+function replyRegist_go(){
+	var replytext = $('#newReplyText').val();
+	//alert(replytext);
+	var data = {
+			"bno":"${board.bno}",
+			"replyer":"${loginUser.id}",
+			"replytext":replytext
+	}
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/reply/regist.do",
+		type:"post",
+		data:JSON.stringify(data),
+		contentType:'application/json',
+		success:function(data){
+			alert('댓글이 등록되었습니다. \n마지막 페이지로 이동합니다.');
+			replyPage = data; //페이지 이동
+			getPage("<%=request.getContextPath()%>/reply/list.do?bno=${board.bno}&page="+data);
+			$('#newReplyText').val("");
 		},
-		"VisibleByLoginCheck": function(replyer){
-			var result = "none";
-			if(replyer == "${loginUser.id}") result = "visible";
-			return result;
-		},
-		"signActive":function(pageNum){
-			if(pageNum == replyPage) return 'active';
+		error:function(error){
+// 			alert('댓글 등록을 실패했습니다.');
+			AjaxErrorSecurityRedirectHandler(error.status);
 		}
-		
+	});
+}
+//댓글 수정 modal
+function replyModifyModal_go(rno){
+	//alert(rno);
+	//alert($('div#'+rno+'-replytext').text());
+	$('div#modifyModal div.modal-body #replytext').val($('div#'+rno+'-replytext').text());
+	$('div#modifyModal div.modal-header h4.modal-title').text(rno);
+}
+
+//댓글 수정
+function replyModify_go(){
+	//alert("modify btn");
+	var rno = $('div#modifyModal h4.modal-title').text();
+	var replytext = $('div#modifyModal #replytext').val();
+	
+	var sendData={
+			"rno":rno,
+			"replytext":replytext
+	}
+	$.ajax({
+		url:"<%=request.getContextPath()%>/reply/modify.do",
+		type:"post",
+		data:JSON.stringify(sendData),
+		contentType:'application/json',
+		success:function(result){
+			alert('수정되었습니다.');
+			getPage("<%=request.getContextPath()%>/reply/list.do?bno=${board.bno}&page="+replyPage);
+		},
+		error:function(error){
+// 			alert('수정 실패했습니다.');
+			AjaxErrorSecurityRedirectHandler(error.status);
+		},
+		complete:function(){
+			$('#modifyModal').modal('hide');
+		}
 	});
 	
-	/* pagination */
-	
-	function printPagination(pageMaker, target, templateObject){
-		var pageNumArray = new Array(pageMaker.endPage-pageMaker.startPage+1);
-		for(var i = 0; i< pageMaker.endPage-pageMaker.startPage+1; i++){
-			pageNumArray[i]= pageMaker.startPage+i;	
+}
+
+function replyRemove_go(){
+	//alert('dd');
+	var rno = $('.modal-title').text();
+	$.ajax({
+		url:"<%=request.getContextPath()%>/reply/remove.do?rno="+rno+"&page="+replyPage+"&bno=${board.bno}",
+		type:"get",
+		success:function(page){
+			alert('삭제되었습니다.');
+			getPage("<%=request.getContextPath()%>/reply/list.do?bno=${board.bno}&page="+page);
+			replyPage=page;
+		},
+		error:function(error){
+// 			alert('삭제 실패했습니다.');
+			AjaxErrorSecurityRedirectHandler(error.status);
+		},
+		complete:function(){
+			$('#modifyModal').modal('hide');
 		}
-		pageMaker.pageNum = pageNumArray;
-		pageMaker.prevPageNum= pageMaker.startPage-1;
-		pageMaker.nextPageNum = pageMaker.endPage+1;
-		
-		var template = Handlebars.compile(templateObject.html());
-		var html = template(pageMaker);
-		target.html("").html(html);
-	}
-	function replyRegist_go(){
-		var replytext = $('#newReplyText').val();
-		//alert(replytext)
-		
-		var data = {
-			"bno" : "${board.bno}",
-			"replyer" : "${loginUser.id}",
-			"replytext" : replytext
-		}
-		
-		$.ajax({
-			url : "<%=request.getContextPath()%>/reply/regist.do",
-			type : "post",
-			data : JSON.stringify(data),
-			contentType: 'application/json',
-			success:function(data){
-				alert('댓글이 등록되었습니다. \n마지막페이지로 이동합니다.');
-				replyPage= data;
-				getPage("<%=request.getContextPath()%>/reply/list.do?bno="+${board.bno}+"&page="+data);
-				$('#newReplyText').val("");
-				},
-			error: function(){
-				AjaxErrorSecurityRedirectHandler(error.status);
-			}
-		})
-	}
-	//댓글 수정 modal
-	function replyModifyModal_go(rno){
-		
-		//alert($('div#'+rno+'-replytext').text());
-		$('div#modifyModal div.modal-body #replytext').val($('div#'+rno+'-replytext').text());
-		$('div#modifyModal div.modal-header h4.modal-title').text(rno);
-		
-	}
-	
-	
-	function replyModify_go(){
-		var rno = $('div#modifyModal h4.modal-title').text();
-		var replytext = $('div#modifyModal #replytext').val();
-		
-		var sendData = {
-				"rno" : rno,
-				"replytext": replytext
-		}
-		
-		$.ajax({
-			url: "<%=request.getContextPath()%>/reply/modify.do",
-			type: "post",
-			data : JSON.stringify(sendData),
-			contentType: "application/json",
-			success: function(result){
-				alert("수정되었습니다.")
-			 getPage("<%=request.getContextPath()%>/reply/list.do?bno="+${board.bno}+"&page="+replyPage)
-			},
-			error:function(){
-				AjaxErrorSecurityRedirectHandler(error.status);
-			},
-			complete:function(){
-				$('#modifyModal').modal('hide');
-			}
-			
-			
-		})
-	}
-	
-	function replyRemove_go(){
-		var rno = $('.modal-title').text();
-		
-		$.ajax({
-			url: "<%=request.getContextPath()%>/reply/remove.do?rno="+rno+"&page="+replyPage+"&bno=${board.bno}",
-			type: "get",
-			success: function(page){
-				alert("삭제되었습니다.");
-				 getPage("<%=request.getContextPath()%>/reply/list.do?bno="+${board.bno}+"&page="+page)
-			},
-			error: function(error){
-				AjaxErrorSecurityRedirectHandler(error.status);
-			},
-			complete:function(){
-				$('#modifyModal').modal('hide');
-			}
-		});
-	}
-</script>
+	});
+}
+</script> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

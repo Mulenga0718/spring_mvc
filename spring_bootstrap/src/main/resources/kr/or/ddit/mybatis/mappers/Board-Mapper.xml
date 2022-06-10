@@ -99,9 +99,7 @@
 	<select id="selectBoardSeqNext" resultType="int">
 		select board_seq.nextval as bno from dual
 	</select>
-	<select id="recentboardlist" resultType="board">
-		select * from board order by REGDATE desc
-	</select>
+	
 </mapper>  
 
 

@@ -1,11 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ include file="/WEB-INF/include/header.jsp" %>
-<title>회원수정</title>
 
-<body>
+
+<%-- <%@ include file="/WEB-INF/include/header.jsp" %> --%>
 
   <!-- Content Wrapper. Contains page content -->
   <div>
@@ -36,18 +33,16 @@
 		<div class="card" style="min-width:450px;">	
 			<div class="card-body">	
 				<div class="row">					
-
 					<input type="hidden" name="oldPicture"  value=""/>
 					<input type="file" id="inputFile" onchange="changePicture_go();" name="picture" style="display:none" />
 					<div class="input-group col-md-12">
 						<div class="col-md-12" style="text-align: center;">
-							<div class="manPicture" data_id="${member.id }" id="pictureView" style="border: 1px solid green; height: 200px; width: 140px; margin: 0px auto; background-image: url('/command_bootstrap/member/getPicture.do?id=${member.id}'); background-position: center center; background-repeat: no-repeat; background-size: cover; "></div>														
+							<div class="manPicture" data-id="${member.id }" id="pictureView" style="border: 1px solid green; height: 200px; width: 140px; margin: 0 auto; margin-bottom:5px;"></div>														
 							<div class="input-group input-group-sm">
 								<label for="inputFile" class=" btn btn-warning btn-sm btn-flat input-group-addon">사진변경</label>
-								<input id="inputFileName" class="form-control" type="text" name="tempPicture" type="hidden"
+								<input id="inputFileName" class="form-control" type="text" name="tempPicture" disabled
 									value="${member.picture }"/>
 								<input id="picture" class="form-control" type="hidden" name="uploadPicture" />
-						
 							</div>						
 						</div>												
 					</div>
@@ -117,53 +112,76 @@
   </section>
     <!-- /.content -->
   </div>
-  <script type="text/javascript">
- 
-	window.onload = function(){
-		MemberPictureThumb("<%=request.getContextPath()%>");
+  
+  <script>
+    window.onload=function(){
+	   MemberPictureThumb('<%=request.getContextPath()%>');
 	}
-	function changePicture_go(){
-		//alert("file change");
-		
-	   var picture = $('#inputFile')[0];
-	  
-	   //이미지 확장자 jpg 확인
-	   var fileFormat = picture.value.substr(picture.value.lastIndexOf(".")+1).toUpperCase();
+  </script>
+  
+  <script>
+ 	 function changePicture_go(){
+ 		//alert("file change");
+ 		
+ 		var picture = $('input#inputFile')[0];
+ 		
+ 		var fileFormat = picture.value.substr(picture.value.lastIndexOf(".")+1).toUpperCase();
+ 		
+ 		//이미지 확장자 jpg 확인
 		if(!(fileFormat=="JPG" || fileFormat=="JPEG")){
-	   		alert("이미지는 jpg/jpeg 형식만 가능합니다.");
-	   		picture.value="";      
-	   		return;
+			alert("이미지는 jpg 형식만 가능합니다.");
+			return;
 		} 
 		//이미지 파일 용량 체크
-	   if(picture.files[0].size>1024*1024*1){
-	      alert("사진 용량은 1MB 이하만 가능합니다.");
-	      picture.value="";
-	      return;
-	   };
-	   
-	   document.getElementById('inputFileName').value= picture.files[0].name;
-	   $('#picture').val(1);
-	   
-	   if(picture.files && picture.files[0]){
-		   
-		   var reader = new FileReader();
-		   
-		   reader.onload = function(e){
-			   $('div#pictureView').css({'background-image': 'url(' + e.target.result+')',
-				   'background-position' : 'center',
-				   'background-size' : 'cover',
-				   'background-repeat' : 'no-repeat'
-			   });
-		   }
-		   
-		   reader.readAsDataURL(picture.files[0])
-	}
-	}
-	
-	function modify_go(){
-	var form = $('form[role="form"]');
-	
-		form.submit();	
-	}
-</script>
-<%@ include file="/WEB-INF/include/footer.jsp" %>
+		if(picture.files[0].size>1024*1024*1){
+			alert("사진 용량은 1MB 이하만 가능합니다.");
+			return;
+		};
+		
+		document.getElementById('inputFileName').value=picture.files[0].name;
+		
+		if (picture.files && picture.files[0]) {
+ 			var reader = new FileReader();
+			 
+			 reader.onload = function (e) {
+		        	//이미지 미리보기	        	
+		        	$('div#pictureView')
+		        	.css({'background-image':'url('+e.target.result+')',
+						  'background-position':'center',
+						  'background-size':'cover',
+						  'background-repeat':'no-repeat'
+		        		});
+		        }
+		        
+		       reader.readAsDataURL(picture.files[0]);
+		}
+		
+		// 이미지 변경 확인
+		$('input[name="uploadPicture"]').val(picture.files[0].name);
+ 	 }
+ 	 
+ 	function modify_go(){
+  		//alert("modify btn click");
+  		var form=$('form[role="form"]');
+  		//form.attr("action","modify.do");
+  		form.submit();
+  	}
+ 	 
+  </script>
+  
+<%-- <%@ include file="/WEB-INF/include/footer.jsp" %> --%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

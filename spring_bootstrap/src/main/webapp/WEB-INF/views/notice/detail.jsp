@@ -5,9 +5,7 @@
     
 
     
-<head>
-
-</head>
+<head></head>
 
 <title>상세 보기</title>
 
@@ -76,16 +74,13 @@
 		</div><!-- end row -->
     </section>
     <!-- /.content -->
-    <script type="text/javascript">
-		
-    	function modify_go(nno){
-    		location.href = "modifyForm.do?nno="+nno;
-    	}
     
-    	function remove_go(nno){
-    		location.href="remove.do?nno="+nno;
-    	}
-    
-    </script>
-    
+<script>
+function modify_go(nno){
+	location.href="modifyForm.do?nno=" + nno;
+}
+function remove_go(nno){
+	location.href="remove.do?nno=" + nno;
+}
+</script>    
 </body>

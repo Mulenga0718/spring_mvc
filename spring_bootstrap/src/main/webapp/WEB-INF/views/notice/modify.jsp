@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<head><link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote-bs4.min.css"></head>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <title>상세 보기</title>
+<head>
+	<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote-bs4.min.css">
+</head>
 
 <body>
  <!-- Main content -->
@@ -69,15 +71,18 @@
 			</div><!-- end col-md-12 -->
 		</div><!-- end row -->
     </section>
-    <script type="text/javascript">
-		window.onload= function(){
-  		 summernote_go($('textarea[name="content"]'),'<%=request.getContextPath()%>');
-  	 	  }
-		
-		  function modifyPOST_go(){
-			  var form = $('form[role="modifyForm"]')[0];
-		    	form.submit();
-		    }
-    </script>
-    </body>
     <!-- /.content -->
+    <script>
+    	window.onload=function(){
+    		summernote_go($('textarea[name="content"]'), '<%=request.getContextPath()%>');
+    	}
+    </script>
+    <script>
+		function modifyPOST_go(){
+			var form = $('form[role="modifyForm"]');
+			form.submit();
+		}
+	</script> 
+    
+</body>    
+    

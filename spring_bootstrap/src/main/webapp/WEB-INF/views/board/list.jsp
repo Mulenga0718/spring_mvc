@@ -99,16 +99,14 @@
 							<td id="boardTitle" style="text-align:left;max-width: 100px; overflow: hidden; 
 												white-space: nowrap; text-overflow: ellipsis;">
 												
-							<a href="javascript:OpenWindow('detail.do?from=list&bno=${board.bno}','상세보기',800,700);">
+							<a href="javascript:OpenWindow('detail.do?from=list&bno=${board.bno }','상세보기',800,700);">
 								<span class="col-sm-12 ">${board.title }
-									<c:if test= "${board.replycnt ne 0}">
+									<c:if test="${board.replycnt ne 0 }">
 										<span class="nav-item">
 										&nbsp;&nbsp;<i class="fa fa-comment"></i>
-										<span class = "badge badge-warning navbar-badge">${board.replycnt}</span>
+										<span class="badge badge-warning navbar-badge">${board.replycnt }</span>
 										</span>
 									</c:if>
-								
-								
 								</span>								
 							</a>
 							</td>

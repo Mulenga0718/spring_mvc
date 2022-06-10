@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<body>
-	<h1>Member Main</h1>
+<%@ page trimDirectiveWhitespaces="true" %>
 
+<head></head>
+
+<title></title>
+
+
+<body>
+	<h1>Member Main Page...</h1>
 </body>

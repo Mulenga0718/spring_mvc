@@ -6,18 +6,18 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import com.jsp.command.SearchCriteria;
-import com.jsp.dao.SearchMemberDao;
+import com.jsp.dao.SearchMemberDAO;
 import com.jsp.dto.MemberVO;
 
 public class MemberDAOBeanImpl implements MemberDAOBean {
 	
 	private SqlSession session;
-	private SearchMemberDao memberDAO;	
+	private SearchMemberDAO memberDAO;	
 	
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
-	public void setSearchMemberDAO(SearchMemberDao memberDAO) {
+	public void setSearchMemberDAO(SearchMemberDAO memberDAO) {
 		this.memberDAO = memberDAO;
 	}
 	

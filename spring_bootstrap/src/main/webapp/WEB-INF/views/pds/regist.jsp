@@ -82,49 +82,59 @@
 	window.onload=function(){
 		summernote_go($('#content'),'<%=request.getContextPath()%>');		
 	}	
-	
-	
 </script>    
-<script type="text/javascript">
-
-var dataNum = 0 ; 
-
+<script>
+var dataNum = 0;
 function addFile_go(){
-		
-		if($('input[name="uploadFile"]').length >=5){
-			alert("파일추가는 5개까지만 가능합니다.");
-			return;
-			}	
+	//alert("add file btn");
 	
-		var div=$('<div>').addClass("inputRow").attr("data-no",dataNum);
-		var input=$('<input>').attr({"type":"file","name":"uploadFile"}).css("display","inline");
-		div.append(input).append("<button onclick='remove_go("+dataNum+");' style='border:0;outline:0;' class='badge bg-red' type='button'>X</button>");
-		
-		$('.fileInput').append(div);
-		
-		dataNum++;
-		
+	if($('input[name="uploadFile"]').length >= 5){
+		alert("파일 추가는 5개까지만 가능합니다.");
+		return;
+	}
+	
+	var div=$('<div>').addClass("inputRow").attr("data-no",dataNum);
+	var input=$('<input>').attr({"type":"file","name":"uploadFile"}).css("display","inline");
+	div.append(input).append("<button onclick='remove_go("+dataNum+");' style='border:0;outline:0;' class='badge bg-red' type='button'>X</button>");
+	
+	$('.fileInput').append(div);
+	
+	dataNum++;
 }
+
 function remove_go(dataNum){
 	//alert(dataNum);
 	$('div[data-no="'+dataNum+'"]').remove();
 }
 
 function regist_go(){
-	
 	var files = $('input[name="uploadFile"]');
 	for(var file of files){
-		console.log(file.name+" : "+file.value);
+		console.log(file.name+" : " + file.value);
 		if(file.value == ""){
-			alert("파일을 선택하세요");
+			alert("파일을 선택하세요.");
 			file.focus();
 			file.click();
 			return;
 		}
-		
-		$("form[role='form']").submit();
 	}
+	
+	if($("input[name='title']").val()==""){
+		alert("제목은 필수입니다.");
+		$("input[name='title']").focus();
+		return;
+	}
+	
+	$("form[role='form']").submit();
 }
 </script>
+
+
+
+
+
+
+
+
 
 

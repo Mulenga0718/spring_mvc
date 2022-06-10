@@ -72,22 +72,34 @@
 		</div><!-- end row -->
     </section>
     <!-- /.content -->
-    <script type="text/javascript">
-    window.onload= function(){
-    summernote_go($('textarea[name="content"]'),'<%=request.getContextPath()%>');
-    }
-    </script>
     
-    <script type="text/javascript">
-    function regist_go(){
-    	var form = document.registForm;
-    	if(form.title.value==""){
-    		alert("제목은 필수입니다.");
-    		return;
+    
+    <script>
+    	window.onload=function(){
+    		summernote_go($('textarea[name="content"]'), '<%=request.getContextPath()%>');
     	}
-    	form.submit();
-    }
-
     </script>
+
+<script>
+function regist_go(){
+	var form = document.registForm;
+	if(form.title.value==""){
+		alert("제목은 필수입니다.");
+		return;
+	}
+	
+	form.submit();
+}
+</script>    
 </body>
+
+
+
+
+
+
+
+
+
+
        
