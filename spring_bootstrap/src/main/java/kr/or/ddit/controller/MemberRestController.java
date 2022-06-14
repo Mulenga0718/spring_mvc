@@ -87,6 +87,7 @@ public class MemberRestController {
 		String imgPath = this.picturePath;
 		
 		try {
+			
 			in = new FileInputStream(new File(imgPath, picture));
 			
 			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), HttpStatus.CREATED);

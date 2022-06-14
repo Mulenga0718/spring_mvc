@@ -50,12 +50,17 @@ public class NoticeServiceImpl implements NoticeService{
 		noticeDAOBean.increaseViewCount(nno);
 		
 		NoticeVO board = noticeDAOBean.selectNoticeByNno(nno);
+		
+		//if(true) throw new SQLException();
 		return board;
 	}
 
 	@Override
 	public NoticeVO getNoticeForModify(int nno) throws SQLException {
 		NoticeVO board = noticeDAOBean.selectNoticeByNno(nno);
+		
+		//if(true) throw new SQLException();
+		
 		return board;
 	}
 
@@ -75,7 +80,6 @@ public class NoticeServiceImpl implements NoticeService{
 
 	@Override
 	public void remove(int nno) throws SQLException {
-
 		noticeDAOBean.deleteNotice(nno);
 	}
 }
