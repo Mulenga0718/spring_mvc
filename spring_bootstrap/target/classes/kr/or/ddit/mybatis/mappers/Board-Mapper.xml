@@ -48,7 +48,11 @@
 		<include refid="search" />
 		order by regDate desc
 	</select>
-	
+	<select id="selectBoardByImage" resultType="board">
+		select * 
+		from board
+		where content like '%'||#{keyword}||'%'
+	</select>
 	<select id="selectSearchBoardListCount" resultType="int">
 		select
 		count(*)

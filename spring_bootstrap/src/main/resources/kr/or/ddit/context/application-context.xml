@@ -20,7 +20,12 @@
 		<constructor-arg value="${pds.upload}" />
 	</bean>
 	
-
+	<bean id="loginUserLogSavePath" class="java.lang.String">
+		<constructor-arg value="${login.user.log}"/>
+	</bean>
+	<bean id="errorLogPath" class="java.lang.String">
+		<constructor-arg value="${error.log}"/>
+	</bean>
 	<!-- Repository -->
 	<bean id="memberDAO" class="com.jsp.dao.MemberDAOImpl" />
 	<bean id="searchMemberDAO" class="com.jsp.dao.SearchMemberDAOImpl" />
@@ -30,6 +35,7 @@
 	<bean id = "replyDAO" class="com.jsp.dao.ReplyDAOImpl" />
 	<bean id = "pdsDAO" class="com.jsp.dao.PdsDAOImpl" />
 	<bean id = "attachDAO" class="com.jsp.dao.AttachDAOImpl" />
+	
 	
 	<bean id="memberDAOBean" class="kr.or.ddit.dao.MemberDAOBeanImpl"
 		p:searchMemberDAO-ref="searchMemberDAO"
@@ -59,7 +65,9 @@
 		p:attachDAO-ref="attachDAO"
 		p:session-ref="sqlSession"	
 	 />
-	 
+	 <bean id = "LoginUserLogDAO" class="kr.or.ddit.dao.LoginUserLogDAOImpl"
+	 	p:sqlsession-ref="sqlSession" />
+	 	
 	<!-- Service -->
 	<bean id="memberService" class="kr.or.ddit.service.MemberServiceImpl"
 		p:memberDAOBean-ref="memberDAOBean"
@@ -82,5 +90,8 @@
 		p:memberDAOBean-ref="memberDAOBean"
 		p:replyDAOBean-ref="replyDAOBean"
 	/>
-
+	<bean id="loginUserLogService"
+		class="kr.or.ddit.service.LoginUserLogServiceImpl"
+		p:loginUserLogDAO-ref="LoginUserLogDAO"
+	/>
 </beans>

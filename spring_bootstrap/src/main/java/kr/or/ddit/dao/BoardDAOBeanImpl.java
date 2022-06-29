@@ -64,7 +64,7 @@ public class BoardDAOBeanImpl implements BoardDAOBean {
 
 	@Override
 	public BoardVO selectBoardByImage(String imageFile) throws SQLException {
-		
+		System.out.println(imageFile);
 		BoardVO board 
 			= session.selectOne("Board-Mapper.selectBoardByImage",imageFile);
 		

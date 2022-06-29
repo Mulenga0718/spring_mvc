@@ -20,6 +20,10 @@
 				class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
 				p:defaultEncoding="utf-8"
 	/>
+	<!-- Bean named Resolver -->
+	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver" 
+		p:order="1"/>
+		
 	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -29,14 +33,23 @@
 	
 	
 	<context:component-scan base-package="kr.or.ddit.controller" />
-	
+	<context:component-scan base-package="kr.or.ddit.restController" />
+	<!-- interceptor -->
 	<interceptors>
 		<interceptor>
 			<mapping path="/**/regist.do"/>
 			<mapping path="/**/modify.do"/>
 			<beans:bean class="kr.or.ddit.interceptor.XSSRequestInterceptor"/>
 		</interceptor>
+		<interceptor>
+			<mapping path="/common/login.do"/>
+			<beans:bean class="kr.or.ddit.interceptor.LoginUserLogInterceptor"
+						p:savePath-ref="loginUserLogSavePath"
+			/>
+		</interceptor>
 	</interceptors>
 	
+	<!-- Views -->
+	<beans:bean id="downloadFile" class="kr.or.ddit.view.FileDownloadView"/>
 	
 </beans:beans>

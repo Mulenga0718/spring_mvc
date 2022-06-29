@@ -86,7 +86,11 @@
 		set viewcnt=viewcnt+1
 		where nno=#{nno}
 	</update>
-	
+	<select id="selectNoticeByImage" resultType="notice">
+		select * 
+		from notice
+		where content like '%'||#{keyword}||'%'
+	</select>
 	<update id="insertNotice" parameterType="notice">
 		insert into 
 		notice(nno,title,writer,content)

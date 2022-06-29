@@ -48,7 +48,11 @@
 		<include refid="search" />
 		order by pno desc
 	</select>
-	
+	<select id="selectPdsByImage" resultType="pds">
+		select * 
+		from pds
+		where content like '%'||#{keyword}||'%'
+	</select>
 	<select id="selectSearchPdsListCount"  resultType="int">
 		select
 		count(*)

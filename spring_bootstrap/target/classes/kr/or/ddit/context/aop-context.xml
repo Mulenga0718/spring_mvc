@@ -13,6 +13,7 @@
 		<tx:attributes>
 			<tx:method name="*" propagation="REQUIRED"/>
 			<tx:method name="regist*" rollback-for="Exception"/>
+			<tx:method name="write*" rollback-for="Exception"/>
 			<tx:method name="modify*" rollback-for="Exception"/>
 			<tx:method name="remove*" rollback-for="Exception"/>
 			<tx:method name="read*" rollback-for="Exception"/>
